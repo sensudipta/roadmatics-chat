@@ -1,0 +1,4 @@
+# SPDX-FileCopyrightText: 2026 Roadmatics Technologies
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# v0.17.0 source commit, verified against the upstream tag.
+matrix-sygnal @ https://codeload.github.com/element-hq/sygnal/tar.gz/53c25a82f85739eb58f2c95b9483f61ac8deedc4#sha256=f6efa3352ecbc545a007727468e8eefc96bab56163ff3b3e168e607496e9ace8

@@ -3,8 +3,11 @@
 
 # Roadmatics push gateway
 
-Deployment is pending mobile validation and server credentials. This document
-does not imply that Sygnal is installed or that push delivery has passed.
+Sygnal v0.17.0 is now installed on the existing Matrix host and its localhost
+health check passes. Firebase service-account authentication and FCM token
+validation pass. Synapse still blocks localhost, so delivery remains pending
+explicit approval for the exception and restart. See the
+[deployment record](deploy/sygnal/README.md) for evidence and rollback.
 
 ## Contract
 
@@ -19,8 +22,8 @@ existing Matrix EC2 host, listening only on `127.0.0.1:5000`.
 - Pusher format: `event_id_only`; retain upstream data-message payload behavior.
 
 Sygnal supports app-ID pattern matching. Retaining device-specific IDs preserves
-upstream multi-account behavior. Verify the actual registered ID and payload on
-the sideloaded build before treating this contract as tested.
+upstream multi-account behavior. A read-only server check confirmed one registered Roadmatics pusher using this
+ID pattern, URL and payload format on the sideloaded release.
 
 No DNS record, public listener, nginx route, certificate, or EC2 inbound port is
 required. The earlier public endpoint suggestion in PRD section 12 is superseded
@@ -43,10 +46,11 @@ by section 25. A future remote gateway requires a deliberate HTTPS migration.
    configuration change and restart if an exception is missing. Do not disable
    the general blacklist. An IP allowlist applies beyond this single port.
 
-## Proposed server configuration
+## Server configuration
 
-Select and pin a supported Sygnal release when deployment starts. The following
-is a template, not an installed configuration:
+The installed release, source hash, dependency snapshot and full configuration
+are in [deploy/sygnal](deploy/sygnal/README.md). The following abbreviated example
+shows the configuration shape:
 
 ```yaml
 http:

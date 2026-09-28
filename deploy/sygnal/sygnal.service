@@ -1,0 +1,35 @@
+# SPDX-FileCopyrightText: 2026 Roadmatics Technologies
+# SPDX-License-Identifier: AGPL-3.0-or-later
+[Unit]
+Description=Roadmatics Matrix push gateway (Sygnal)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=sygnal
+Group=sygnal
+WorkingDirectory=/opt/sygnal
+Environment=SYGNAL_CONF=/etc/sygnal/sygnal.yaml
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/opt/sygnal/venv/bin/python -m sygnal.sygnal
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+CapabilityBoundingSet=
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

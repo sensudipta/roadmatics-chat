@@ -4,7 +4,7 @@
 # Roadmatics Chat build report — 2026-09-29
 
 **Android build, login, room-list sync and bidirectional text messaging verified.
-Remaining device acceptance and server push deployment are pending. Do not
+Sygnal is installed; Synapse activation and remaining device acceptance are pending. Do not
 describe this as an end-to-end accepted release.**
 
 ## Repository
@@ -74,7 +74,7 @@ two secure locations as described in [ANDROID_BUILD.md](ANDROID_BUILD.md).
 | APK ZIP / 64-bit ELF alignment | PASS — 16 KB zipalign and all 18 inspected 64-bit ELF libraries |
 | Release AAB | PASS — corrected release, 22.8 seconds; bundletool 1.18.3 validation successful |
 | AAB signing | PASS — jarsigner reports verified; standard self-signed/no-timestamp warnings and streaming manifest-order warnings recorded |
-| REUSE licence audit | PASS — 636/636 files with copyright/licence information at audit time |
+| REUSE licence audit | PASS — 642/642 files with copyright/licence information at audit time |
 | Secret scan | PASS — staged-source scan clear; history clear with eight explicitly reviewed upstream findings (see SECRET_AUDIT.md) |
 | Release install / launch | PASS — corrected signed release updated in place and launched on Realme RMX1921, Android 11 |
 | Account login / room-list sync | PASS — user confirmed successful login and visible room list on the corrected release. |
@@ -84,7 +84,9 @@ two secure locations as described in [ANDROID_BUILD.md](ANDROID_BUILD.md).
 | Attachment / media download | NOT TESTED |
 | Search / background-resume | NOT TESTED |
 | FCM initialization/token | Supported by runtime evidence — Firebase setup reached, followed by pusher registration attempt, which requires a non-null FCM token. No token or pusher errors appeared in the captured log. Token value was not displayed. |
-| Registered pusher / push delivery / notification tap | PENDING — registration success needs independent confirmation; Sygnal deployment and delivery tests remain outstanding. |
+| Registered pusher | PASS — read-only server query found one matching Roadmatics pusher, with the expected localhost URL and payload format; no token printed. |
+| Sygnal / Firebase server checks | PASS — v0.17.0 active only on localhost; health HTTP 200; service-account authentication and FCM validate-only request HTTP 200. |
+| Push delivery / notification tap | PENDING — live Synapse blocks localhost; exception and restart require approval before end-to-end delivery tests. |
 | iOS build/signing | NOT RUN — Android-first Linux milestone |
 | GitHub Actions | No remote runs returned after publication |
 
@@ -138,20 +140,22 @@ for the reviewed source, with historical upstream exceptions documented explicit
 Real Android signing properties and Firebase client JSON are ignored. No secrets
 were added to CI or release documentation.
 
-No AWS, Synapse, PostgreSQL, S3, DNS, nginx or Element changes were made. Sygnal is
-not deployed. Synapse's default outbound IP policy blocks loopback, so its actual
-configuration must be inspected before deploying the localhost gateway. If a
-Synapse exception is required, the PRD's exclusion of Synapse changes requires
-separate authorization for that exact change.
+Sygnal was installed on the existing Matrix EC2 host in its own virtual
+environment, with a dedicated service user and protected Firebase Admin key.
+No AWS API, Synapse, PostgreSQL, S3, DNS, nginx or Element configuration changes
+were made. A read-only PostgreSQL query verified the pusher. The live Synapse
+parser confirms that localhost is blocked. A proposed `127.0.0.1/32` exception
+was validated using a temporary file but is not installed. Applying it and
+restarting Synapse require explicit authorization under PRD section 3. See
+[deployment details and rollback](deploy/sygnal/README.md).
 
 ## Remaining actions
 
 1. Complete the remaining DM/group, media, reactions, search and background
    acceptance checks above; login and bidirectional text messaging are confirmed.
 2. Check the public repository CI run when available.
-3. Provide Matrix host/access details and put a matching Firebase Admin
-   service-account JSON securely on the server (not in this repository). Confirm
-   the registered pusher and server topology, then install/test Sygnal per
-   PUSH_GATEWAY.md. These server prerequisites have been requested.
+3. Obtain explicit approval for the prepared Synapse localhost exception and
+   brief service restart, then test actual notification delivery and tap behavior.
+   The Admin key, server access, registered pusher and gateway are now verified.
 4. Back up the upload key/password. Store console setup, approved artwork,
    confirmed privacy details and later iOS signing remain separate publication work.
