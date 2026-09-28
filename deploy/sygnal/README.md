@@ -5,7 +5,8 @@
 
 Sygnal is installed on SSH alias `matrix` (Ubuntu 24.04, Python 3.12.3).
 It runs natively as system user `sygnal`; no Docker or public listener was added.
-Synapse remains unchanged. End-to-end notification delivery is not yet accepted.
+The user explicitly approved the localhost Synapse exception and restart.
+That exception is installed; end-to-end notification delivery is not yet accepted.
 
 ## Installed artifacts
 
@@ -50,36 +51,30 @@ an intentional gateway update.
   `validate_only=true` using the registered device token. This did not deliver a
   notification and is not evidence of end-to-end push delivery.
 
-## Pending Synapse exception — requires explicit approval
+## Approved Synapse exception — installed
 
-The live Synapse allowlist is empty. Its effective blocklist blocks `127.0.0.1`.
-The proposed file `synapse-local-push.yaml.example` would be installed as:
-
-`/etc/matrix-synapse/conf.d/roadmatics-push.yaml`
+The user authorized the exact localhost exception and brief restart on
+2026-09-29. The live allowlist and absence of the destination file were rechecked
+before installing `/etc/matrix-synapse/conf.d/roadmatics-push.yaml`
+(`root:matrix-synapse`, `0640`):
 
 ```yaml
 ip_range_whitelist:
   - '127.0.0.1/32'
 ```
 
-The installed Synapse parser accepted this candidate, loaded from a temporary
-file alongside the real configuration. It allowed `127.0.0.1` while still
-blocking `127.0.0.2`, `169.254.169.254`, and `10.0.0.1`. The temporary file was
-removed; the candidate was not installed and Synapse was not restarted.
+The installed Synapse parser validated the merged configuration. It allows
+`127.0.0.1` while still blocking `127.0.0.2`, `169.254.169.254`, and `10.0.0.1`.
+Synapse was restarted successfully. Both local and public Matrix client versions
+endpoints returned HTTP 200, Sygnal health returned 200, and both services were
+active with no automatic restarts at verification time.
 
 This IP exception applies to all ports on `127.0.0.1` and to outbound request
 types governed by this policy, including federation. It cannot be restricted to
-Sygnal's port by this setting. No inbound firewall, nginx, DNS or TLS change is
-needed. The PRD section 3 says "Change Synapse" is out of scope, so applying this
-exception and restarting `matrix-synapse` needs explicit user authorization.
-A restart briefly interrupts Matrix connections.
-
-After approval: recheck that the allowlist and candidate destination are
-unchanged; install the candidate with appropriate owner/read permissions;
-validate the merged configuration; restart `matrix-synapse`; verify service and
-client API health. If health fails, remove only the newly installed candidate
-file and restart Synapse to restore the previous policy. Existing Synapse files
-are not replaced.
+Sygnal's port by this setting. No inbound firewall, nginx, DNS or TLS change was
+made. Existing Synapse files were not replaced. The activation procedure had an
+automatic rollback if validation, restart, or health verification failed;
+rollback was not needed.
 
 Then validate notifications from another real Matrix account in foreground,
 background, after removal from recents, and on notification tap. The user must
@@ -89,5 +84,6 @@ initiate test messages; no messages have been sent by this deployment.
 
 `sudo systemctl disable --now sygnal` stops only the new gateway. Keep the
 credential protected for later reuse or arrange deliberate credential removal.
-If the Synapse exception was separately approved and installed, remove that
-single drop-in and restart Synapse to restore the previous outbound policy.
+To undo the approved Synapse exception, remove only
+`/etc/matrix-synapse/conf.d/roadmatics-push.yaml` and restart `matrix-synapse` to
+restore the previous outbound policy. Verify the client API after rollback.

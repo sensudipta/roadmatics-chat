@@ -5,8 +5,9 @@
 
 Sygnal v0.17.0 is now installed on the existing Matrix host and its localhost
 health check passes. Firebase service-account authentication and FCM token
-validation pass. Synapse still blocks localhost, so delivery remains pending
-explicit approval for the exception and restart. See the
+validation pass. The user-approved Synapse localhost exception is installed
+and its restart passed health checks. Actual phone delivery and notification tap
+tests remain pending. See the
 [deployment record](deploy/sygnal/README.md) for evidence and rollback.
 
 ## Contract

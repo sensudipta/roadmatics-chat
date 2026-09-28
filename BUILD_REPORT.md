@@ -4,7 +4,8 @@
 # Roadmatics Chat build report — 2026-09-29
 
 **Android build, login, room-list sync and bidirectional text messaging verified.
-Sygnal is installed; Synapse activation and remaining device acceptance are pending. Do not
+Sygnal and the approved Synapse localhost exception are active; remaining device
+acceptance is pending. Do not
 describe this as an end-to-end accepted release.**
 
 ## Repository
@@ -86,7 +87,8 @@ two secure locations as described in [ANDROID_BUILD.md](ANDROID_BUILD.md).
 | FCM initialization/token | Supported by runtime evidence — Firebase setup reached, followed by pusher registration attempt, which requires a non-null FCM token. No token or pusher errors appeared in the captured log. Token value was not displayed. |
 | Registered pusher | PASS — read-only server query found one matching Roadmatics pusher, with the expected localhost URL and payload format; no token printed. |
 | Sygnal / Firebase server checks | PASS — v0.17.0 active only on localhost; health HTTP 200; service-account authentication and FCM validate-only request HTTP 200. |
-| Push delivery / notification tap | PENDING — live Synapse blocks localhost; exception and restart require approval before end-to-end delivery tests. |
+| Synapse localhost activation | PASS — user-approved `127.0.0.1/32` exception installed; merged config valid; restart and local/public API health checks passed. |
+| Push delivery / notification tap | PENDING — infrastructure active; user asked to test a message from another account with the phone app in the background, then tap the notification. |
 | iOS build/signing | NOT RUN — Android-first Linux milestone |
 | GitHub Actions | No remote runs returned after publication |
 
@@ -142,11 +144,11 @@ were added to CI or release documentation.
 
 Sygnal was installed on the existing Matrix EC2 host in its own virtual
 environment, with a dedicated service user and protected Firebase Admin key.
-No AWS API, Synapse, PostgreSQL, S3, DNS, nginx or Element configuration changes
-were made. A read-only PostgreSQL query verified the pusher. The live Synapse
-parser confirms that localhost is blocked. A proposed `127.0.0.1/32` exception
-was validated using a temporary file but is not installed. Applying it and
-restarting Synapse require explicit authorization under PRD section 3. See
+No AWS API, PostgreSQL, S3, DNS, nginx or Element configuration changes were
+made. A read-only PostgreSQL query verified the pusher. After explicit user
+approval, a dedicated Synapse configuration file was added for `127.0.0.1/32`
+and the service restarted. Existing configuration files were preserved; merged
+validation and local/public API health checks passed. See
 [deployment details and rollback](deploy/sygnal/README.md).
 
 ## Remaining actions
@@ -154,8 +156,7 @@ restarting Synapse require explicit authorization under PRD section 3. See
 1. Complete the remaining DM/group, media, reactions, search and background
    acceptance checks above; login and bidirectional text messaging are confirmed.
 2. Check the public repository CI run when available.
-3. Obtain explicit approval for the prepared Synapse localhost exception and
-   brief service restart, then test actual notification delivery and tap behavior.
-   The Admin key, server access, registered pusher and gateway are now verified.
+3. Complete actual notification delivery and tap tests. The approved Synapse
+   exception is active; Admin key, device token, pusher and gateway are verified.
 4. Back up the upload key/password. Store console setup, approved artwork,
    confirmed privacy details and later iOS signing remain separate publication work.

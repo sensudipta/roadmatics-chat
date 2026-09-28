@@ -1,8 +1,8 @@
 # SPDX-FileCopyrightText: 2026 Roadmatics Technologies
 # SPDX-License-Identifier: AGPL-3.0-or-later
-# PENDING APPROVAL: do not install without explicit permission to change Synapse.
-# Proposed destination: /etc/matrix-synapse/conf.d/roadmatics-push.yaml
-# Current live allowlist is empty. Preserve existing entries if this changes.
+# Approved and installed on the Matrix host on 2026-09-29.
+# Destination: /etc/matrix-synapse/conf.d/roadmatics-push.yaml
+# Preserve any other allowlist entries when reusing this example.
 # This allows outbound access to this IP on ALL ports, not only Sygnal port 5000.
 ip_range_whitelist:
   - '127.0.0.1/32'
