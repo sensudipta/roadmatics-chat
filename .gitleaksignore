@@ -1,0 +1,18 @@
+# Only reviewed upstream history findings; never blanket-ignore a secret rule.
+# Details and classifications: SECRET_AUDIT.md.
+# macos/Podfile.lock - upstream lockfile checksum
+4d7f0295ca3034caeda51e1a1877c6e69f7a522d:macos/Podfile.lock:generic-api-key:200
+# macos/Podfile.lock - upstream lockfile checksum
+e548d8f895d7568fbb05aa35368d5593a23fddc2:macos/Podfile.lock:generic-api-key:188
+# macos/Podfile.lock - upstream lockfile checksum
+ab9ca586b430c101d1d4f224b9e819620e33b902:macos/Podfile.lock:generic-api-key:191
+# macos/Podfile.lock - upstream lockfile checksum
+bdbb289569ccc7d2232c918b2bce234d41fbd317:macos/Podfile.lock:generic-api-key:157
+# macos/Podfile.lock - upstream lockfile checksum
+0693cc5fa69ca0bbc694fbf19c945b8904405b36:macos/Podfile.lock:generic-api-key:146
+# macos/Podfile.lock - upstream lockfile checksum
+929b8e5c6803dd0c3030b0dc484fe8fbcd33e3a3:macos/Podfile.lock:generic-api-key:147
+# android/app/google-services.json - upstream public Firebase client configuration
+48b4f2cad68064574deef1153201294fe926db82:android/app/google-services.json:gcp-api-key:23
+# PRIVACY.md - upstream documented example
+abc2e098f3f3cbb7f7886ffccaacf4fe28052acf:PRIVACY.md:generic-api-key:78

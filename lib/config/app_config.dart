@@ -10,15 +10,15 @@ abstract class AppConfig {
 
   static const Color chatColor = primaryColor;
   static const double messageFontSize = 16.0;
-  static const bool allowOtherHomeservers = true;
-  static const bool enableRegistration = true;
+  static const bool allowOtherHomeservers = false;
+  static const bool enableRegistration = false;
   static const bool hideTypingUsernames = false;
 
   static const String inviteLinkPrefix = 'https://matrix.to/#/';
-  static const String deepLinkPrefix = 'im.fluffychat://chat/';
+  static const String deepLinkPrefix = 'com.roadmatics.chat://chat/';
   static const String schemePrefix = 'matrix:';
-  static const String pushNotificationsChannelId = 'fluffychat_push';
-  static const String pushNotificationsAppId = 'chat.fluffy.fluffychat';
+  static const String pushNotificationsChannelId = 'roadmatics_chat_push';
+  static const String pushNotificationsAppId = 'com.roadmatics.chat';
   static const double borderRadius = 18.0;
   static const double spaceBorderRadius = 11.0;
   static const double columnWidth = 360.0;
@@ -31,24 +31,25 @@ abstract class AppConfig {
       'https://fluffychat.im/faq/#how_do_i_find_other_users';
   static const String howDoIGetStickersTutorial =
       'https://fluffychat.im/faq/#how_do_i_get_stickers';
-  static const String appId = 'im.fluffychat.FluffyChat';
-  static const String appOpenUrlScheme = 'im.fluffychat';
-  static const String appSsoUrlScheme = 'im.fluffychat.auth';
+  static const String appId = 'com.roadmatics.chat';
+  static const String appOpenUrlScheme = 'com.roadmatics.chat';
+  static const String appSsoUrlScheme = 'com.roadmatics.chat.auth';
 
   static const String sourceCodeUrl =
-      'https://github.com/krille-chan/fluffychat';
+      'https://github.com/sensudipta/roadmatics-chat';
   static const String supportUrl =
-      'https://github.com/krille-chan/fluffychat/issues';
-  static const String changelogUrl = 'https://fluffychat.im/changelog/';
+      'https://github.com/sensudipta/roadmatics-chat/issues';
+  static const String changelogUrl =
+      'https://github.com/sensudipta/roadmatics-chat/releases';
   static const String helpUrl =
-      'https://fluffychat.im/faq/#how_can_i_support_fluffychat';
+      'https://github.com/sensudipta/roadmatics-chat/issues';
 
   static const Set<String> defaultReactions = {'👍', '❤️', '😂', '😮', '😢'};
 
   static final Uri newIssueUrl = Uri(
     scheme: 'https',
     host: 'github.com',
-    path: '/krille-chan/fluffychat/issues/new',
+    path: '/sensudipta/roadmatics-chat/issues/new',
   );
 
   static final Uri homeserverList = Uri(

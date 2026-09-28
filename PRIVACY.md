@@ -1,132 +1,62 @@
 <!--
 SPDX-FileCopyrightText: 2019-Present Christian Kußowski
 SPDX-FileCopyrightText: 2019-Present Contributors to FluffyChat
-
+SPDX-FileCopyrightText: 2026 Roadmatics Technologies
 SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-# Privacy
+# Roadmatics Chat privacy information
 
-FluffyChat is available on Android, iOS, Linux and as a web version. Desktop versions for Windows and macOS may follow.
+This describes the client configuration. Retention periods, administrator access
+policies, data-subject request procedures, company contact details, and store
+Data Safety declarations still need confirmation by Roadmatics before store
+publication. This document does not invent those practices.
 
-*   [Matrix](#matrix)
-*   [Database](#database)
-*   [Encryption](#encryption)
-*   [App Permissions](#app-permissions)
-*   [Push Notifications](#push-notifications)
-*   [PlayStore Safety Standards](#playstore-safety)
+## Matrix messages and media
 
-## <a id="matrix" href="#matrix">#</a> Matrix
-FluffyChat uses the Matrix protocol. This means that FluffyChat is just a client that can be connected to any compatible matrix server. The respective data protection agreement of the server selected by the user then applies.
+The app connects to the Roadmatics Matrix server at
+`https://matrix.roadmatics.com`. Roadmatics infrastructure controls server-side
+message, account, and media storage. The client keeps local account state,
+message caches, encryption keys and downloaded media as needed to function.
+Android system backup of the app is disabled by the application manifest.
 
-For convenience, one or more servers are set as default that the FluffyChat developers consider trustworthy. The developers of FluffyChat do not guarantee their trustworthiness. Before the first communication, users are informed which server they are connecting to.
+End-to-end encrypted room content is encrypted for participating clients. Server
+operators cannot ordinarily read that content without appropriate decryption
+keys or access to a participating endpoint. This is not a promise that every
+room is encrypted: unencrypted operational rooms may be processed by Roadmatics
+backend automation. Room participants can copy or export content, and federated
+rooms may involve other homeservers under their own policies.
 
-FluffyChat only communicates with the selected server and with [OpenStreetMap](https://openstreetmap.org) to display maps.
+## Notifications
 
-More information is available at: [https://matrix.org](https://matrix.org)
+Firebase Cloud Messaging may process device push tokens and delivery metadata.
+The client registers a pusher with the Roadmatics homeserver. The intended route
+is Synapse → Roadmatics Sygnal → Firebase → the phone. The gateway uses the
+`event_id_only` Matrix format; the client retrieves relevant events to display
+notifications. End-to-end delivery is subject to the deployment acceptance tests.
 
-## <a id="database" href="#database">#</a> Database
-FluffyChat caches some data received from the server in a local sqflite database on the device of the user. On web indexedDB is used. FluffyChat always tries to encrypt the database by using SQLCipher and stores the encryption key in the [Secure Storage](https://pub.dev/packages/flutter_secure_storage) of the device.
+The Roadmatics Firebase token is not configured to use the FluffyChat push
+service. Firebase client configuration is distinct from server-side Admin
+credentials; Admin credentials must never be included in the mobile app.
 
-More information is available at: [https://pub.dev/packages/sqflite](https://pub.dev/packages/sqflite) and [https://pub.dev/packages/sqlcipher_flutter_libs](https://pub.dev/packages/sqlcipher_flutter_libs)
+## Device permissions and external services
 
-## <a id="encryption" href="#encryption">#</a> Encryption
-All communication of substantive content between Fluffychat and any server is done in secure way, using transport encryption to protect it.
+Camera, microphone, photos/files, location and notification permissions support
+user-invoked chat features. Denying a permission can disable its associated
+feature. The current native client does not configure automatic reporting to
+FluffyChat's crash service or silently add Sentry/Crashlytics.
 
-FluffyChat also uses End-To-End-Encryption by using [Vodozemac](https://github.com/matrix-org/vodozemac) and enables it by default for private chats.
+User-opened links, retained upstream help pages, map tiles and other optional
+external resources contact their respective providers. See
+[EXTERNAL_SERVICES.md](EXTERNAL_SERVICES.md). Future app-store platform telemetry
+is governed by the applicable Apple/Google settings and terms.
 
-## <a id="app-permissions" href="#app-permissions">#</a> App Permissions
+Logs can contain operational identifiers. Review and redact logs before sharing
+an issue; never post access tokens, push tokens, passwords, or private keys.
 
-The permissions are the same on Android and iOS but may differ in the name. This are the Android Permissions:
+## Contact and publication
 
-#### Internet Access
-FluffyChat needs to have internet access to communicate with the Matrix Server.
-
-#### Vibrate
-FluffyChat uses vibration for local notifications. More informations about this are at the used package:
-[https://pub.dev/packages/flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications)
-
-#### Record Audio
-FluffyChat can send voice messages in a chat and therefore needs to have the permission to record audio.
-
-#### Write External Storage
-The user is able to save received files and therefore app needs this permission.
-
-#### Read External Storage
-The user is able to send files from the device's file system.
-
-#### Location
-FluffyChat makes it possible to share the current location via the chat. When the user shares their location, FluffyChat uses the device location service and sends the geo-data via Matrix.
-
-## <a id="push-notifications" href="#push-notifications">#</a> Push Notifications
-FluffyChat uses the Firebase Cloud Messaging service for push notifications on Android and iOS. This takes place in the following steps:
-1. The matrix server sends the push notification to the FluffyChat Push Gateway
-2. The FluffyChat Push Gateway forwards the message in a different format to Firebase Cloud Messaging
-3. Firebase Cloud Messaging waits until the user's device is online again
-4. The device receives the push notification from Firebase Cloud Messaging and displays it as a notification
-
-The source code of the push gateway can be viewed here:
-[https://github.com/krille-chan/fluffygate](https://github.com/krille-chan/fluffygate)
-
-`event_id_only` is used as the format for the push notification. A typical push notification therefore only contains:
-- Event ID
-- Room ID
-- Unread Count
-- Information about the device that is to receive the message
-
-A typical push notification could look like this:
-```json
-{
-  "notification": {
-    "event_id": "$3957tyerfgewrf384",
-    "room_id": "!slw48wfj34rtnrf:example.com",
-    "counts": {
-      "unread": 2,
-      "missed_calls": 1
-    },
-    "devices": [
-      {
-        "app_id": "chat.fluffy.fluffychat",
-        "pushkey": "V2h5IG9uIGVhcnRoIGRpZCB5b3UgZGVjb2RlIHRoaXM/",
-        "pushkey_ts": 12345678,
-        "data": {
-          "client_name": "<random-identifier-for-the-client-in-case-of-multi-account-usage>"  
-        },
-        "tweaks": {
-          "sound": "bing"
-        }
-      }
-    ]
-  }
-}
-```
-
-FluffyChat sets the `event_id_only` flag at the Matrix Server. This server is then responsible to send the correct data.
-
-
-# <a id="playstore-safety" href="#playstore-safety">#</a> Explanation of FluffyChat's Compliance with Google Play Store's Safety Standards
-
-FluffyChat is committed to promoting a safe and respectful environment for all users. As a Matrix client, FluffyChat connects users to various Matrix servers. Please note that FluffyChat does not host or manage any servers directly, and as such, we do not have the capability to enforce content moderation or deletion within the app itself.
-
-To enhance user safety and help protect against the sexual abuse and exploitation of children, FluffyChat enables users to report inappropriate content directly to server administrators.
-
-#### Reporting Content or Users:
-
-1. Mark a message in the chat: Tap and hold the message you wish to report.
-2. Report the message: Select the "Report" option.
-3. Provide a reason and score: Enter the reason for reporting and assign a score from 1-100 to indicate how offensive the content is.
-4. Notification to admin: The server administrator will be notified of the reported content.
-
-In addition to reporting messages, users can also report other users following a similar process.
-
-We encourage server administrators to adhere to strict safety standards and provide mechanisms for addressing and moderating inappropriate content. For more information on the Matrix protocol and its safety standards, please refer to the following link: https://matrix.org/docs/older/moderation/
-
-## Impressum
-
-krille-chan - Christian Kußowski  
-c/o Online-Impressum #8198  
-Europaring 90  
-53757 St Augustin
-
-E-Mail: christian-kussowski[at)posteo.de  
-[Zweiter Kontaktweg](https://mein.online-impressum.de/krille-chan/#Zweiter_Kontaktweg)
+For account access, deletion, retention, or privacy questions, use your established
+Roadmatics administrator/support channel. A confirmed public privacy contact and
+stable Roadmatics-owned policy URL are required before store publication. The
+GitHub version of this document is a temporary publication location.

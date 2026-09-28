@@ -4,12 +4,12 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 name: fluffychat
-description: Chat with your friends.
+description: Roadmatics Chat, a Matrix client based on FluffyChat.
 publish_to: none
 # On version bump please also increase:
 # 1. The build number (for F-Droid)
 # 2. The version in /snap/snapcraft.yaml
-version: 2.9.1+3560
+version: 0.1.0+1
 
 environment:
   sdk: ">=3.11.1 <4.0.0"
@@ -27,6 +27,7 @@ dependencies:
   device_info_plus: ^13.2.0
   dynamic_color: ^1.9.0
   emoji_picker_flutter: ^4.5.3
+  fcm_shared_isolate: ^3.0.0
   file_picker: ^12.0.0-beta.7
   file_selector: ^1.1.0
   flutter:
@@ -103,6 +104,7 @@ flutter:
   assets:
     - assets/
     - assets/logo/mini/
+    - assets/roadmatics/
     - assets/sounds/
     - assets/vodozemac/
 
@@ -112,21 +114,14 @@ hooks:
       source: sqlcipher
 
 flutter_launcher_icons:
-  image_path: assets/logo/img/logo.png
+  image_path: assets/roadmatics/rc.png
   android: true
-  adaptive_icon_foreground: assets/logo/img/logo_foreground.png
-  adaptive_icon_background: assets/logo/img/logo_background.png
-  adaptive_icon_monochrome: assets/logo/img/logo_mono.png
+  adaptive_icon_foreground: assets/roadmatics/rc_foreground.png
+  adaptive_icon_background: "#261386"
+  adaptive_icon_monochrome: assets/roadmatics/rc_foreground.png
   ios: true
-  macos:
-    generate: true
-  windows:
-    generate: true
-  web:
-    generate: true
-    image_path: assets/logo/img/logo_standalone.png
-    background_color: "#FFFFFF"
-    theme_color: "#41a2bc"
+  remove_alpha_ios: true
+  background_color_ios: "#261386"
 
 # Guidelines for adding a dependency override:
 # 1. Don't do it if you can avoid it or fix it upstream in a manageable time

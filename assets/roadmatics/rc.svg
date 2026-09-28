@@ -1,0 +1,7 @@
+<!-- SPDX-FileCopyrightText: 2026 Roadmatics Technologies -->
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <rect width="1024" height="1024" rx="220" fill="#261386"/>
+  <path fill="white" fill-rule="evenodd" d="M 268,674 L 268,350 L 397,350 C 547,350 547,551 426,561 L 512,674 L 449,674 L 361,562 L 316,562 L 316,674 Z M 316,398 L 316,514 L 397,514 C 483,514 483,398 397,398 Z"/>
+  <path fill="white" d="M 755,380 L 724,418 C 630,342 575,423 575,512 C 575,601 630,682 724,606 L 755,644 C 626,752 527,645 527,512 C 527,379 626,272 755,380 Z"/>
+</svg>

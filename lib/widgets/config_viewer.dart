@@ -64,6 +64,7 @@ class _ConfigViewerState extends State<ConfigViewer> {
     final normalizedQuery = _searchQuery.trim().toLowerCase();
     final filteredSettings = AppSettings.values
         .where((setting) {
+          if (setting.isDeploymentSetting) return false;
           if (normalizedQuery.isEmpty) return true;
           return setting.name.toLowerCase().contains(normalizedQuery);
         })

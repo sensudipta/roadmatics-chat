@@ -34,7 +34,7 @@ configurations.all {
 
 
 android {
-    namespace = "chat.fluffy.fluffychat"
+    namespace = "com.roadmatics.chat"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -50,10 +50,7 @@ android {
 
     signingConfigs {
        create("release") {
-            keyAlias = "dummyAlias"
-            keyPassword = "dummyPassword"
-            storeFile = file("dummy.keystore")
-            storePassword = "dummyStorePassword"
+            // Credentials come only from ignored android/key.properties.
         }
     }
 
@@ -70,7 +67,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "chat.fluffy.fluffychat"
+        applicationId = "com.roadmatics.chat"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
@@ -92,4 +89,16 @@ android {
 
 flutter {
     source = "../.."
+}
+
+// Fail before release tasks run; never fall back to Android's debug certificate.
+gradle.taskGraph.whenReady {
+    if (allTasks.any { it.project == project && it.name.contains("Release") }) {
+        check(rootProject.file("key.properties").exists()) {
+            "Roadmatics release signing requires android/key.properties. See ANDROID_BUILD.md."
+        }
+        check(file("google-services.json").exists()) {
+            "Roadmatics releases require the matching local Firebase client configuration."
+        }
+    }
 }

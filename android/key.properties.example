@@ -1,0 +1,5 @@
+# Roadmatics upload signing. Copy to ignored android/key.properties locally.
+storePassword=CHANGE_ME
+keyPassword=CHANGE_ME
+keyAlias=roadmatics-chat-upload
+storeFile=/absolute/path/outside/repository/roadmatics-chat-upload.jks

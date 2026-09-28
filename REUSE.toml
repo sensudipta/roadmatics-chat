@@ -61,3 +61,14 @@ path = [
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2017-Present Fabiyamada"
 SPDX-License-Identifier = "CC-BY-4.0"
+# Roadmatics placeholder artwork and generated mobile assets
+[[annotations]]
+path = ["assets/roadmatics/**", "android/app/src/main/res/drawable-*/splash.png", "android/app/src/main/res/drawable-*/notifications_icon.png", "android/app/src/main/res/drawable-*/ic_launcher_foreground.png", "android/app/src/main/res/drawable-*/ic_launcher_monochrome.png", "android/app/src/main/res/mipmap-*/ic_launcher.png", "ios/Runner/Assets.xcassets/AppIcon.appiconset/*.png", "ios/Runner/Assets.xcassets/LaunchImage.imageset/*.png"]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Roadmatics Technologies"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = ["Roadmatics_Chat_FluffyChat_PRD.md", ".gitleaksignore"]
+SPDX-FileCopyrightText = "2026 Roadmatics Technologies"
+SPDX-License-Identifier = "AGPL-3.0-or-later"

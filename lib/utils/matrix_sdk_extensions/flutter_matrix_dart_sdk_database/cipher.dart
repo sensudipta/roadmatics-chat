@@ -20,7 +20,7 @@ const _passwordStorageKey = 'database_password';
 Future<String?> getDatabaseCipher() async {
   String? password;
 
-  const iosOptions = IOSOptions(groupId: 'group.im.fluffychat.app');
+  const iosOptions = IOSOptions(groupId: 'group.com.roadmatics.chat');
 
   try {
     password = await FlutterSecureStorage(

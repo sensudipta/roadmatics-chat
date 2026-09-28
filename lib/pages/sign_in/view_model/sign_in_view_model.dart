@@ -42,7 +42,8 @@ class SignInViewModel extends ValueNotifier<SignInState> {
             )
             .toList() ??
         [];
-    if (filterText.length >= 3 &&
+    if (AppConfig.allowOtherHomeservers &&
+        filterText.length >= 3 &&
         (filterText.contains('.') || filterText.endsWith('localhost')) &&
         Uri.tryParse(filterText) != null &&
         !filteredPublicHomeservers.any(
@@ -60,6 +61,14 @@ class SignInViewModel extends ValueNotifier<SignInState> {
     final defaultHomeserverData = PublicHomeserverData(
       name: AppSettings.defaultHomeserver.value,
     );
+    if (!AppConfig.allowOtherHomeservers) {
+      value.selectedHomeserver = defaultHomeserverData;
+      value.publicHomeservers = AsyncSnapshot.withData(ConnectionState.done, [
+        defaultHomeserverData,
+      ]);
+      _filterHomeservers();
+      return;
+    }
     try {
       final client = await matrixService.getLoginClient();
       final response = await client.httpClient.get(AppConfig.homeserverList);

@@ -90,7 +90,7 @@ class NotificationService: UNNotificationServiceExtension {
             return
         }
         guard let containerPath = FileManager.default.containerURL(
-                forSecurityApplicationGroupIdentifier: "group.im.fluffychat.app"
+                forSecurityApplicationGroupIdentifier: "group.com.roadmatics.chat"
             ) else {
                 os_log("[FluffyChatPushHelper] Unable to get container path!")
                 contentHandler(bestAttemptContent)
@@ -167,7 +167,7 @@ class NotificationService: UNNotificationServiceExtension {
             kSecAttrService as String: "flutter_secure_storage_service",
             kSecAttrAccount as String: "database_password",
             kSecReturnData as String: true,
-            kSecAttrAccessGroup as String: "group.im.fluffychat.app",
+            kSecAttrAccessGroup as String: "group.com.roadmatics.chat",
         ]
 
         var item: CFTypeRef?

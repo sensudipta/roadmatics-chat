@@ -3,6 +3,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
+import 'package:fluffychat/config/app_config.dart';
 import 'package:fluffychat/config/setting_keys.dart';
 import 'package:fluffychat/l10n/l10n.dart';
 import 'package:fluffychat/pages/intro/flows/restore_backup_flow.dart';
@@ -45,17 +46,18 @@ class IntroPage extends StatelessWidget {
           PopupMenuButton(
             useRootNavigator: true,
             itemBuilder: (_) => [
-              PopupMenuItem(
-                onTap: isLoading ? null : () => restoreBackupFlow(context),
-                child: Row(
-                  mainAxisSize: .min,
-                  children: [
-                    const Icon(Icons.import_export_outlined),
-                    const SizedBox(width: 12),
-                    Text(L10n.of(context).hydrate),
-                  ],
+              if (AppConfig.allowOtherHomeservers)
+                PopupMenuItem(
+                  onTap: isLoading ? null : () => restoreBackupFlow(context),
+                  child: Row(
+                    mainAxisSize: .min,
+                    children: [
+                      const Icon(Icons.import_export_outlined),
+                      const SizedBox(width: 12),
+                      Text(L10n.of(context).hydrate),
+                    ],
+                  ),
                 ),
-              ),
               PopupMenuItem(
                 onTap: () => launchUrlString(AppSettings.privacyPolicy.value),
                 child: Row(
@@ -111,7 +113,7 @@ class IntroPage extends StatelessWidget {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(128),
                                 child: Image.asset(
-                                  './assets/logo/mini/logo_mini.png',
+                                  'assets/roadmatics/rc.png',
                                   width: 128,
                                   height: 128,
                                 ),
@@ -138,7 +140,8 @@ class IntroPage extends StatelessWidget {
                               mainAxisSize: .min,
                               crossAxisAlignment: .stretch,
                               children: [
-                                if (!hasPresetHomeserver)
+                                if (!hasPresetHomeserver &&
+                                    AppConfig.enableRegistration)
                                   ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor:

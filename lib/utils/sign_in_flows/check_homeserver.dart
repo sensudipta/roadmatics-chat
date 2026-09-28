@@ -3,6 +3,7 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
+import 'package:fluffychat/config/app_config.dart';
 import 'package:fluffychat/config/setting_keys.dart';
 import 'package:fluffychat/l10n/l10n.dart';
 import 'package:fluffychat/pages/sign_in/view_model/model/public_homeserver_data.dart';
@@ -26,7 +27,14 @@ Future<void> connectToHomeserverFlow(
 ) async {
   setState(AsyncSnapshot.waiting());
   try {
-    final homeserverInput = homeserverData.name!;
+    if (signUp && !AppConfig.enableRegistration) {
+      throw StateError(
+        'Roadmatics accounts are created by your administrator.',
+      );
+    }
+    final homeserverInput = AppConfig.allowOtherHomeservers
+        ? homeserverData.name!
+        : AppSettings.presetHomeserver.defaultValue;
     var homeserver = Uri.parse(homeserverInput);
     if (homeserver.scheme.isEmpty) {
       homeserver = Uri.https(homeserverInput, '');

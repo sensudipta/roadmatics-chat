@@ -53,7 +53,7 @@ Future<Directory?> getFileStorageLocation() async {
     late final Directory temporaryDirectory;
     if (PlatformInfos.isIOS) {
       final containerPath = await PathProviderFoundation().getContainerPath(
-        appGroupIdentifier: 'group.im.fluffychat.app',
+        appGroupIdentifier: 'group.com.roadmatics.chat',
       );
       temporaryDirectory = Directory(containerPath!);
     } else if (PlatformInfos.isLinux) {
@@ -123,7 +123,7 @@ Future<MatrixSdkDatabase> _constructDatabase(String clientName) async {
 Future<String> _getDatabaseDirectory() async {
   if (PlatformInfos.isIOS) {
     final containerPath = await PathProviderFoundation().getContainerPath(
-      appGroupIdentifier: 'group.im.fluffychat.app',
+      appGroupIdentifier: 'group.com.roadmatics.chat',
     );
     if (containerPath == null) {
       Logs().w('No container path found for iOS app!');

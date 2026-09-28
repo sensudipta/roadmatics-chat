@@ -64,6 +64,7 @@ abstract class PlatformInfos {
       context: context,
       children: [
         Text(l10n.versionWithNumber(version)),
+        const Text('Based on FluffyChat • AGPL-3.0-or-later'),
         TextButton.icon(
           onPressed: () => launchUrlString(AppConfig.sourceCodeUrl),
           icon: const Icon(Icons.source_outlined),
@@ -96,11 +97,7 @@ abstract class PlatformInfos {
       ],
       applicationIcon: ClipRRect(
         borderRadius: BorderRadius.circular(64),
-        child: Image.asset(
-          './assets/logo/mini/logo_mini.png',
-          width: 64,
-          height: 64,
-        ),
+        child: Image.asset('assets/roadmatics/rc.png', width: 64, height: 64),
       ),
       applicationName: AppSettings.applicationName.value,
     );

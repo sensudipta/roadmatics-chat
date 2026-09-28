@@ -28,7 +28,7 @@ enum AppSettings<T> {
   unifiedPushEndpoint<String>('chat.fluffy.unifiedpush.endpoint', ''),
   pushNotificationsGatewayUrl<String>(
     'pushNotificationsGatewayUrl',
-    'https://push.fluffychat.im/_matrix/push/v1/notify',
+    'http://127.0.0.1:5000/_matrix/push/v1/notify',
   ),
   pushNotificationsPusherFormat<String>(
     'pushNotificationsPusherFormat',
@@ -52,25 +52,37 @@ enum AppSettings<T> {
   ),
   displayChatDetailsColumn('chat.fluffy.display_chat_details_column', false),
   // AppConfig-mirrored settings
-  applicationName<String>('chat.fluffy.application_name', 'FluffyChat'),
-  defaultHomeserver<String>('chat.fluffy.default_homeserver', 'matrix.org'),
+  applicationName<String>('chat.fluffy.application_name', 'Roadmatics Chat'),
+  defaultHomeserver<String>(
+    'chat.fluffy.default_homeserver',
+    'matrix.roadmatics.com',
+  ),
   // colorSchemeSeed stored as ARGB int
   colorSchemeSeedInt<int>('chat.fluffy.color_scheme_seed', 0xFF5625BA),
   emojiSuggestionLocale<String>('emoji_suggestion_locale', ''),
   enableSoftLogout<bool>('chat.fluffy.enable_soft_logout', false),
   enableMatrixNativeOIDC<bool>('chat.fluffy.enable_matrix_native_oidc', false),
-  presetHomeserver<String>('chat.fluffy.preset_homeserver', ''),
+  presetHomeserver<String>(
+    'chat.fluffy.preset_homeserver',
+    'matrix.roadmatics.com',
+  ),
   welcomeText<String>('chat.fluffy.welcome_text', ''),
-  website<String>('chat.fluffy.website_url', 'https://fluffychat.im'),
+  website<String>(
+    'chat.fluffy.website_url',
+    'https://github.com/sensudipta/roadmatics-chat',
+  ),
   logoUrl<String>(
     'chat.fluffy.logo_url',
-    'https://fluffychat.im/assets/favicon.png',
+    'https://raw.githubusercontent.com/sensudipta/roadmatics-chat/main/assets/roadmatics/rc.png',
   ),
   privacyPolicy<String>(
     'chat.fluffy.privacy_policy_url',
-    'https://fluffychat.im/privacy',
+    'https://github.com/sensudipta/roadmatics-chat/blob/main/PRIVACY.md',
   ),
-  tos<String>('chat.fluffy.tos_url', 'https://fluffychat.im/tos'),
+  tos<String>(
+    'chat.fluffy.tos_url',
+    'https://github.com/sensudipta/roadmatics-chat/blob/main/PRIVACY.md',
+  ),
   sendTimelineEventTimeout<int>('chat.fluffy.send_timeline_event_timeout', 15),
   webNotificationSound<bool>('chat.fluffy.web_notification_sound', true),
   chatFilter<String>('chat.fluffy.chat_filter', 'allChats'),
@@ -79,6 +91,19 @@ enum AppSettings<T> {
   doubleTapToReact<bool>('chat.fluffy.double_tap_to_react', false),
   doubleTapReaction<String>('chat.fluffy.double_tap_reaction', '❤️'),
   benchmarksInLogs<bool>('chat.fluffy.benchmarks_in_logs', false);
+
+  // Deployment identity and endpoints are fixed for this single-server client.
+  bool get isDeploymentSetting => const <AppSettings>{
+    applicationName,
+    defaultHomeserver,
+    presetHomeserver,
+    pushNotificationsGatewayUrl,
+    pushNotificationsPusherFormat,
+    website,
+    logoUrl,
+    privacyPolicy,
+    tos,
+  }.contains(this);
 
   final String key;
   final T defaultValue;
@@ -174,6 +199,7 @@ extension AppSettingsBoolExtension on AppSettings<bool> {
 
 extension AppSettingsStringExtension on AppSettings<String> {
   String get value {
+    if (isDeploymentSetting) return defaultValue;
     final value = Result(() => AppSettings.store.getString(key));
     final error = value.asError;
     if (error != null) {

@@ -44,7 +44,7 @@ class LoginView extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(128),
                       child: Image.asset(
-                        './assets/logo/mini/logo_mini.png',
+                        'assets/roadmatics/rc.png',
                         width: 128,
                         height: 128,
                       ),
@@ -69,7 +69,7 @@ class LoginView extends StatelessWidget {
                       prefixIcon: const Icon(Icons.account_box_outlined),
                       errorText: controller.usernameError,
                       errorStyle: const TextStyle(color: Colors.orange),
-                      hintText: '@username:domain',
+                      hintText: '@username:roadmatics.com',
                       labelText: L10n.of(context).matrixId,
                     ),
                   ),

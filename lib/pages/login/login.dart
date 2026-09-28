@@ -5,6 +5,7 @@
 
 import 'dart:async';
 
+import 'package:fluffychat/config/app_config.dart';
 import 'package:fluffychat/l10n/l10n.dart';
 import 'package:fluffychat/utils/localized_exception_extension.dart';
 import 'package:fluffychat/widgets/adaptive_dialogs/show_ok_cancel_alert_dialog.dart';
@@ -104,6 +105,7 @@ class LoginController extends State<Login> {
 
   void checkWellKnownWithCoolDown(String userId) {
     _coolDown?.cancel();
+    if (!AppConfig.allowOtherHomeservers) return;
     _coolDown = Timer(
       const Duration(seconds: 1),
       () => _checkWellKnown(userId),

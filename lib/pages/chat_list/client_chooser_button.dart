@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import 'package:async/async.dart';
+import 'package:fluffychat/config/app_config.dart';
 import 'package:fluffychat/l10n/l10n.dart';
 import 'package:fluffychat/widgets/avatar.dart';
 import 'package:fluffychat/widgets/matrix.dart';
@@ -87,7 +88,7 @@ class ClientChooserButton extends StatelessWidget {
           children: [
             Icon(Icons.favorite, color: Colors.red),
             const SizedBox(width: 18),
-            Text(L10n.of(context).supportFluffyChat),
+            Text(L10n.of(context).support),
           ],
         ),
       ),
@@ -212,9 +213,7 @@ class ClientChooserButton extends StatelessWidget {
           FluffyShare.shareInviteLink(context);
           break;
         case SettingsAction.support:
-          launchUrlString(
-            'https://fluffychat.im/faq/#how_can_i_support_fluffychat',
-          );
+          launchUrlString(AppConfig.supportUrl);
           break;
         case SettingsAction.settings:
           context.go('/rooms/settings');

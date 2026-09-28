@@ -1,9 +1,9 @@
 {
-  "applicationName": "FluffyChat",
-  "defaultHomeserver": "matrix.org",
-  "presetHomeserver": "",
+  "applicationName": "Roadmatics Chat",
+  "defaultHomeserver": "matrix.roadmatics.com",
+  "presetHomeserver": "matrix.roadmatics.com",
   "welcomeText": "",
-  "privacyUrl": "https://github.com/krille-chan/fluffychat/blob/main/PRIVACY.md",
+  "privacyUrl": "https://github.com/sensudipta/roadmatics-chat/blob/main/PRIVACY.md",
   "audioRecordingNumChannels": 1,
   "audioRecordingAutoGain": true,
   "audioRecordingEchoCancel": false,
