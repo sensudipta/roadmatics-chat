@@ -61,6 +61,35 @@ two secure locations as described in [ANDROID_BUILD.md](ANDROID_BUILD.md).
 
 ## Verification
 
+### Smaller APKs for direct distribution
+
+The original universal APK is 188,402,268 bytes (179.7 MiB); native libraries
+for four architectures account for 171.4 MiB. Separate standalone APKs built
+with `flutter build apk --release --split-per-abi --no-pub` in 46.3 seconds:
+
+| APK in `build/app/outputs/flutter-apk/` | Bytes | MiB | SHA256 |
+| --- | ---: | ---: | --- |
+| `app-arm64-v8a-release.apk` | 64,549,753 | 61.56 | `10104a6ba4eaf9808a4e73b8dfafe79488a47b787d7e013c6f60054c454eb387` |
+| `app-armeabi-v7a-release.apk` | 56,408,615 | 53.80 | `bcd64b75b0bede2bdd8b3909c6d6acbcb8a2dc5e93ca16e0eb57ee314c2f924c` |
+| `app-x86_64-release.apk` | 71,320,470 | 68.02 | `7178798c2b0da39daa73e2341ce5c3dc747ef1d2ee317fd58f4c616176f8f9b1` |
+
+Removed the upstream explicit NDK ABI filter workaround, which conflicted with
+split APKs and included unsupported x86 native code. Flutter now owns ABI
+selection. No features or dependencies were removed. All three APKs contain
+only their named ABI, pass signature verification with the existing upload
+certificate, and pass 16 KB ZIP alignment checks. The older universal APK and
+AAB above remain unchanged local artifacts.
+
+The connected Realme supports ARM64. The ARM64 APK installed successfully over
+the universal release with `adb install -r` and launched; functional messaging
+and push acceptance were not repeated for this packaging change.
+Flutter assigns ABI-specific version codes;
+the ARM64 APK reports version `0.1.0`, code `2001` (the universal APK used `1`).
+Future releases must use increasing installed version codes, including when
+switching back to a universal APK or moving to Play distribution.
+
+### Existing functional validation
+
 | Check | Result |
 | --- | --- |
 | Untouched stable Android baseline | PASS — v2.9.1 debug build, 220.8 seconds |

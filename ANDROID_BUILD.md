@@ -56,6 +56,7 @@ flutter analyze
 flutter test
 flutter build apk --debug
 flutter build apk --release
+flutter build apk --release --split-per-abi
 flutter build appbundle --release
 ```
 
@@ -63,7 +64,20 @@ Typical artifacts:
 
 - `build/app/outputs/flutter-apk/app-debug.apk`
 - `build/app/outputs/flutter-apk/app-release.apk`
+- `build/app/outputs/flutter-apk/app-arm64-v8a-release.apk` (64-bit ARM phones)
+- `build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk` (32-bit ARM phones)
+- `build/app/outputs/flutter-apk/app-x86_64-release.apk` (64-bit Intel devices)
 - `build/app/outputs/bundle/release/app-release.aab`
+
+For direct team distribution, prefer the APK matching the phone's architecture.
+Each is a standalone installer with the same features and release signing key.
+The universal `app-release.apk` includes multiple architectures and is much
+larger. Check a connected phone with `adb shell getprop ro.product.cpu.abilist`.
+Use the AAB for Play distribution, which generates device-specific downloads.
+See [Flutter's Android release guide](https://docs.flutter.dev/deployment/android#build-an-apk).
+Flutter applies ABI-specific version-code offsets to these APKs (the initial
+ARM64 build is code `2001`). Future updates, including universal/Play builds,
+must have a higher version code than the installed artifact.
 
 Verify before distribution:
 
