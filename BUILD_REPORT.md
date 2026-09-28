@@ -75,7 +75,7 @@ two secure locations as described in [ANDROID_BUILD.md](ANDROID_BUILD.md).
 | APK ZIP / 64-bit ELF alignment | PASS — 16 KB zipalign and all 18 inspected 64-bit ELF libraries |
 | Release AAB | PASS — corrected release, 22.8 seconds; bundletool 1.18.3 validation successful |
 | AAB signing | PASS — jarsigner reports verified; standard self-signed/no-timestamp warnings and streaming manifest-order warnings recorded |
-| REUSE licence audit | PASS — 642/642 files with copyright/licence information at audit time |
+| REUSE licence audit | PASS — 643/643 files with copyright/licence information at audit time |
 | Secret scan | PASS — staged-source scan clear; history clear with eight explicitly reviewed upstream findings (see SECRET_AUDIT.md) |
 | Release install / launch | PASS — corrected signed release updated in place and launched on Realme RMX1921, Android 11 |
 | Account login / room-list sync | PASS — user confirmed successful login and visible room list on the corrected release. |
@@ -84,11 +84,13 @@ two secure locations as described in [ANDROID_BUILD.md](ANDROID_BUILD.md).
 | Reply/thread / reactions | NOT TESTED |
 | Attachment / media download | NOT TESTED |
 | Search / background-resume | NOT TESTED |
-| FCM initialization/token | Supported by runtime evidence — Firebase setup reached, followed by pusher registration attempt, which requires a non-null FCM token. No token or pusher errors appeared in the captured log. Token value was not displayed. |
+| FCM initialization/token | PASS — runtime registration, server-side token validation and subsequent successful device delivery; token value was not displayed. |
 | Registered pusher | PASS — read-only server query found one matching Roadmatics pusher, with the expected localhost URL and payload format; no token printed. |
 | Sygnal / Firebase server checks | PASS — v0.17.0 active only on localhost; health HTTP 200; service-account authentication and FCM validate-only request HTTP 200. |
 | Synapse localhost activation | PASS — user-approved `127.0.0.1/32` exception installed; merged config valid; restart and local/public API health checks passed. |
-| Push delivery / notification tap | PENDING — infrastructure active; user asked to test a message from another account with the phone app in the background, then tap the notification. |
+| Background push / notification tap | PASS — after the Sygnal startup correction, server recorded successful delivery; user confirmed notification arrival and the correct room on tap. |
+| Removed-from-recents push / tap | PASS — user confirmed arrival and correct-room tap after swiping the app away, without Android force-stop. |
+| Foreground notification behavior | NOT TESTED separately; foreground messaging passed. |
 | iOS build/signing | NOT RUN — Android-first Linux milestone |
 | GitHub Actions | No remote runs returned after publication |
 
@@ -109,13 +111,15 @@ key. A real tap of Sign in reached the live Roadmatics password screen, with
 two input fields and no route-error page. No password was entered by automation.
 The user subsequently confirmed that the room list appears and messages can be
 sent and received. Separate DM/group, media, search and notification acceptance
-have not been inferred from that confirmation.
+were not inferred from that confirmation. Background notification delivery and
+tap were subsequently confirmed separately, as recorded above.
 
 A private, app-process-only Android log capture reached Firebase setup and
 pusher registration without observed token-acquisition or registration errors.
 The registration-attempt log occurs after the code requires a non-null FCM token;
-this supports Firebase/token initialization but does not independently prove that
-Synapse retained the pusher or delivered a notification. The local capture is
+this initially supported Firebase/token initialization. Subsequent read-only
+server checks confirmed registration, and a real-message test confirmed delivery.
+The local capture is
 outside Git with mode `0600`; no token or message content is included here.
 
 ## Known build warnings and resolved failures
@@ -131,6 +135,10 @@ outside Git with mode `0600`; no token or message content is included here.
 - A release attempt overlapped Flutter tests and picked up test-only plugin
   registration. Rerun succeeded with operations serialized. Do not run Flutter
   tests/builds simultaneously in this checkout.
+- The initial Sygnal service accepted connections but stalled outbound POST
+  requests because upstream startup used two separate reactors. A narrow launcher
+  now runs upstream Sygnal on one shared reactor. Controlled POST probes and the
+  real notification retry verified the correction; no dependency downgrade.
 - Host unit tests need CMake in PATH; this machine uses
   `/data/Android/Sdk/cmake/3.22.1/bin`.
 
@@ -156,7 +164,8 @@ validation and local/public API health checks passed. See
 1. Complete the remaining DM/group, media, reactions, search and background
    acceptance checks above; login and bidirectional text messaging are confirmed.
 2. Check the public repository CI run when available.
-3. Complete actual notification delivery and tap tests. The approved Synapse
-   exception is active; Admin key, device token, pusher and gateway are verified.
+3. Check foreground-specific notification behavior. Background delivery and
+   delivery after removal from recents, including correct-room tap, have passed;
+   the approved Synapse exception and corrected gateway launcher are active.
 4. Back up the upload key/password. Store console setup, approved artwork,
    confirmed privacy details and later iOS signing remain separate publication work.

@@ -13,7 +13,7 @@ WorkingDirectory=/opt/sygnal
 Environment=SYGNAL_CONF=/etc/sygnal/sygnal.yaml
 Environment=PYTHONUNBUFFERED=1
 Environment=PYTHONDONTWRITEBYTECODE=1
-ExecStart=/opt/sygnal/venv/bin/python -m sygnal.sygnal
+ExecStart=/opt/sygnal/venv/bin/python /opt/sygnal/run_sygnal.py
 Restart=on-failure
 RestartSec=5
 TimeoutStopSec=30

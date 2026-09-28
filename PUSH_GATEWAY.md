@@ -6,8 +6,10 @@
 Sygnal v0.17.0 is now installed on the existing Matrix host and its localhost
 health check passes. Firebase service-account authentication and FCM token
 validation pass. The user-approved Synapse localhost exception is installed
-and its restart passed health checks. Actual phone delivery and notification tap
-tests remain pending. See the
+and its restart passed health checks. A startup fix makes Sygnal use one shared
+reactor; the user has now confirmed background delivery and correct-room
+notification tap, including after removal from recents. Foreground-specific
+notification behavior remains a separate check. See the
 [deployment record](deploy/sygnal/README.md) for evidence and rollback.
 
 ## Contract

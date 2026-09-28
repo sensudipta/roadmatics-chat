@@ -6,13 +6,16 @@
 Sygnal is installed on SSH alias `matrix` (Ubuntu 24.04, Python 3.12.3).
 It runs natively as system user `sygnal`; no Docker or public listener was added.
 The user explicitly approved the localhost Synapse exception and restart.
-That exception is installed; end-to-end notification delivery is not yet accepted.
+That exception is installed. The user confirmed background notification arrival
+and that tapping it opens the correct room after the startup fix below.
 
 ## Installed artifacts
 
 - `sygnal.yaml` → `/etc/sygnal/sygnal.yaml` (`root:sygnal`, `0640`).
 - `sygnal.service` → `/etc/systemd/system/sygnal.service` (`root:root`, `0644`).
 - Virtual environment: `/opt/sygnal/venv`, owned by root.
+- `run_sygnal.py` → `/opt/sygnal/run_sygnal.py` (`root:root`, `0644`).
+  The service uses this entrypoint to run upstream Sygnal on one shared reactor.
 - Firebase Admin credential: `/etc/sygnal/firebase-roadmatics.json`
   (`root:sygnal`, `0640`, parent directory `0750`). Never commit this file.
 - Upstream v0.17.0, commit `53c25a82f85739eb58f2c95b9483f61ac8deedc4`.
@@ -51,6 +54,30 @@ an intentional gateway update.
   `validate_only=true` using the registered device token. This did not deliver a
   notification and is not evidence of end-to-end push delivery.
 
+## Runtime POST stall and verified correction
+
+The first real-message test timed out between Synapse and Sygnal. A successful
+FCM validate-only request had used a different HTTP transport, so it had not
+exercised this runtime path. OAuth refresh and isolated TLS probes passed.
+
+Sygnal v0.17.0 installs a global Twisted asyncio reactor but creates a second
+reactor to run the service. Its HTTP body producer uses the global reactor.
+A no-credential, no-delivery POST probe reproduced a timeout with that two-reactor
+arrangement; the same POST completed promptly with HTTP 401 when using one
+shared reactor (401 was expected without credentials).
+
+The small `run_sygnal.py` entrypoint installs one reactor and passes it to
+upstream `Sygnal`, retaining its config loader and push-handling implementation.
+No dependency downgrade or package-cache source modification was needed. The
+unit now invokes this launcher. After restarting only Sygnal, Synapse retried
+the queued notification, the gateway returned HTTP 200, and the pusher recorded
+`last_success` with `failing_since` cleared. The phone log reached event loading
+and push-helper completion without a crash. The user confirmed notification
+arrival and navigation to the correct room on tap.
+
+The empty-device diagnostic request returned HTTP 400; this was an intentional
+malformed request and is separate from the successful real notification.
+
 ## Approved Synapse exception — installed
 
 The user authorized the exact localhost exception and brief restart on
@@ -76,9 +103,10 @@ made. Existing Synapse files were not replaced. The activation procedure had an
 automatic rollback if validation, restart, or health verification failed;
 rollback was not needed.
 
-Then validate notifications from another real Matrix account in foreground,
-background, after removal from recents, and on notification tap. The user must
-initiate test messages; no messages have been sent by this deployment.
+Background delivery, notification tap, and delivery after removal from recents
+are user-confirmed. Tapping opened the correct room in both background cases.
+Foreground-specific notification behavior remains a separate acceptance check.
+The user initiates test Matrix messages; no Matrix messages were sent by automation.
 
 ## Gateway rollback
 
