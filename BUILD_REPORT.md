@@ -17,7 +17,7 @@ deployment pending. Do not describe this as an end-to-end accepted release.**
 | Branch | `main` |
 | Stable base | `v2.9.1` |
 | Base SHA | `f7bded3e049c0077b3ade8d02cae6d06e5d5756f` |
-| Public push | Pending authentication; HTTPS push dry run could not obtain credentials. Repository confirmed public and empty before work. |
+| Public push | User published implementation commit `b28766ac3`; GitHub CLI browser authentication is now configured. |
 
 The latest stable v2.9.5 was tried first. Its explicit SDK 37 target is incompatible
 with the currently available SDK 37.0 under its pinned AGP. The PRD's earlier
@@ -46,9 +46,9 @@ notification/database fixes were carried forward separately. Details:
 - Java for Gradle: Android Studio JBR **21.0.10**.
 - AGP **8.11.1**, Gradle **8.14.1**, Kotlin **2.2.20**.
 - APK: `build/app/outputs/flutter-apk/app-release.apk` (approximately 185.6 MB).
-- APK SHA256: `58911f1ef844fe6bf3a15dd5a0769a982473154f59b7ca38246bfb4fd3b13b1d`.
+- APK SHA256: `9a571a7de55ffc8d5218e3b4453dddab9f71d689ff53b957f400cdeb409859d6`.
 - AAB: `build/app/outputs/bundle/release/app-release.aab` (approximately 147.1 MB).
-- AAB SHA256: `929ff147710b6c654d748bd0af02c1dbeb4f103bb36bf080f7b5f3698cee10f7`.
+- AAB SHA256: `012eff7104a9092e3285ceeab517a1e8936a54db9cba4a12079ce3add8c3bf05`.
 - Upload certificate SHA256:
   `814ac1705878e9dd808ed9cde05a2a5d733d45c553cb02dc31c99f7b0277bd02`.
 - Debug APK: `build/app/outputs/flutter-apk/app-debug.apk`.
@@ -63,30 +63,43 @@ two secure locations as described in [ANDROID_BUILD.md](ANDROID_BUILD.md).
 | --- | --- |
 | Untouched stable Android baseline | PASS — v2.9.1 debug build, 220.8 seconds |
 | Dependency resolution | PASS — existing dependency versions retained; only FCM/Firebase entries added |
-| Roadmatics analyze | PASS — no issues, final run 35.5 seconds |
-| Tests | PASS — 6 tests, including 2 new login/configuration regression tests; upstream includes placeholder widget tests |
+| Roadmatics analyze | PASS — no issues, final run 38.6 seconds |
+| Tests | PASS — 8 tests, including 4 login/configuration regression tests; upstream includes placeholder widget tests |
 | Roadmatics debug build | PASS — 64.3 seconds |
-| Roadmatics signed release APK | PASS — 101.3 seconds |
+| Roadmatics signed release APK | PASS — corrected release, 68.4 seconds |
 | APK signature | PASS — APK Signature Scheme v2, one RSA-3072 Roadmatics signer |
 | APK manifest | PASS — package/name/version/launcher verified from artifact |
 | APK Firebase resources | PASS — matching Roadmatics Android app/project identifiers and FCM service present; notification permission declared |
 | APK ZIP / 64-bit ELF alignment | PASS — 16 KB zipalign and all 18 inspected 64-bit ELF libraries |
-| Release AAB | PASS — 21.7 seconds; bundletool 1.18.3 validation successful |
+| Release AAB | PASS — corrected release, 22.8 seconds; bundletool 1.18.3 validation successful |
 | AAB signing | PASS — jarsigner reports verified; standard self-signed/no-timestamp warnings and streaming manifest-order warnings recorded |
-| REUSE licence audit | PASS — 635/635 files with copyright/licence information at audit time |
+| REUSE licence audit | PASS — 636/636 files with copyright/licence information at audit time |
 | Secret scan | PASS — staged-source scan clear; history clear with eight explicitly reviewed upstream findings (see SECRET_AUDIT.md) |
-| Release install / launch | NOT TESTED — no connected Android device visible |
-| Account login / room sync | NOT TESTED |
+| Release install / launch | PASS — corrected signed release updated in place and launched on Realme RMX1921, Android 11 |
+| Account login / room sync | PENDING — corrected release now opens the password form against `matrix.roadmatics.com` on the phone; awaiting manual account login. |
 | Text send/receive / DM / group | NOT TESTED |
 | Reply/thread / reactions | NOT TESTED |
 | Attachment / media download | NOT TESTED |
 | Search / background-resume | NOT TESTED |
 | FCM initialization/token / push delivery / notification tap | NOT TESTED — device and Sygnal prerequisites pending |
 | iOS build/signing | NOT RUN — Android-first Linux milestone |
-| GitHub Actions | NOT RUN remotely — source not yet pushed |
+| GitHub Actions | No remote runs returned after publication |
 
 Read-only HTTP checks confirmed that the Roadmatics Matrix endpoint responds and
 advertises password login. These are not proof of authenticated login or messaging.
+
+## Device regression correction
+
+The initial release sent the preset-server Sign in button from `/home` to
+nonexistent `/login`. The shared flow had assumed that every caller was on a
+server-selection page. It now removes only `sign_in` or `sign_up`, preserving
+the intro route for both first login and adding an account. Two widget tests
+reproduced the incorrect destinations before the fix and pass after it.
+
+The corrected release was installed with `adb install -r` using the same upload
+key. A real tap of Sign in reached the live Roadmatics password screen, with
+two input fields and no route-error page. No password was entered by automation.
+Authenticated login, room sync and messaging remain pending user sign-in.
 
 ## Known build warnings and resolved failures
 
@@ -120,11 +133,9 @@ separate authorization for that exact change.
 
 ## Remaining actions
 
-1. Connect a Google Play Services Android phone with USB debugging and authorize
-   it. Install the signed release, then log in using a normal Roadmatics account
-   and complete the acceptance checks above. Do not send passwords in chat.
-2. Configure GitHub authentication for the authorized public-source push; recheck
-   the final audit and remote state immediately before publication.
+1. Complete normal-account login on the connected phone and the remaining
+   acceptance checks above. Do not send passwords in chat.
+2. Check the public repository CI run when available.
 3. Once mobile Firebase initialization is verified, provide the Matrix host/access
    details and put a matching Firebase Admin service-account JSON securely on the
    server (not in this repository). Then install/test Sygnal per PUSH_GATEWAY.md.
