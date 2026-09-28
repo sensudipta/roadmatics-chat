@@ -198,3 +198,19 @@ android/app/google-services.json
 # iOS
 ios/Runner.ipa
 ios/Runner/GoogleServices-Info.plist
+
+# Roadmatics local credentials and build environments
+*.keystore
+*.p8
+**/key.properties
+**/google-services.json
+**/GoogleService-Info.plist
+**/GoogleServices-Info.plist
+**/*service-account*.json
+**/*service_account*.json
+**/firebase-admin*.json
+**/*firebase-adminsdk*.json
+.env
+.env.*
+!.env.example
+.secrets/
