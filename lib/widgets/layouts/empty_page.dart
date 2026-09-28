@@ -25,7 +25,7 @@ class EmptyPage extends StatelessWidget {
       body: Container(
         alignment: Alignment.center,
         child: Image.asset(
-          'assets/roadmatics/rc_foreground.png',
+          'assets/roadmatics/logo_monochrome.png',
           color: theme.colorScheme.surfaceContainerHigh,
           width: width,
           height: width,

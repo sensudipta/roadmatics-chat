@@ -114,14 +114,15 @@ hooks:
       source: sqlcipher
 
 flutter_launcher_icons:
-  image_path: assets/roadmatics/rc.png
+  image_path: assets/roadmatics/app_icon.png
   android: true
-  adaptive_icon_foreground: assets/roadmatics/rc_foreground.png
-  adaptive_icon_background: "#261386"
-  adaptive_icon_monochrome: assets/roadmatics/rc_foreground.png
+  adaptive_icon_foreground: assets/roadmatics/logo.png
+  adaptive_icon_foreground_inset: 18
+  adaptive_icon_background: "#F4FCFF"
+  adaptive_icon_monochrome: assets/roadmatics/logo_monochrome.png
   ios: true
   remove_alpha_ios: true
-  background_color_ios: "#261386"
+  background_color_ios: "#F4FCFF"
 
 # Guidelines for adding a dependency override:
 # 1. Don't do it if you can avoid it or fix it upstream in a manageable time

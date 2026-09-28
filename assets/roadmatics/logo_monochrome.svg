@@ -1,0 +1,14 @@
+<!-- SPDX-FileCopyrightText: 2026 Roadmatics Technologies -->
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 256 256">
+  <path fill="white" fill-rule="evenodd" d="M128 14 238 77 128 140 18 77Z M128 28 42 77 128 126 214 77Z"/>
+  <path fill="white" d="M122 24H134V54L200 92 188 99 128 65 68 99 56 92 122 54Z"/>
+  <path fill="white" fill-rule="evenodd" d="M18 88 122 148V248L18 188Z M30 109V180L110 226V155Z"/>
+  <path fill="white" fill-rule="evenodd" d="M134 148 238 88V188L214 202V241L177 221 134 248Z M146 155V226L177 207 202 220V194L226 180V109Z"/>
+  <ellipse fill="white" cx="48" cy="143" rx="6" ry="8"/>
+  <ellipse fill="white" cx="71" cy="156" rx="6" ry="8"/>
+  <ellipse fill="white" cx="94" cy="169" rx="6" ry="8"/>
+  <ellipse fill="white" cx="163" cy="174" rx="6" ry="8"/>
+  <ellipse fill="white" cx="186" cy="161" rx="6" ry="8"/>
+  <ellipse fill="white" cx="209" cy="148" rx="6" ry="8"/>
+</svg>

@@ -73,7 +73,7 @@ enum AppSettings<T> {
   ),
   logoUrl<String>(
     'chat.fluffy.logo_url',
-    'https://raw.githubusercontent.com/sensudipta/roadmatics-chat/main/assets/roadmatics/rc.png',
+    'https://raw.githubusercontent.com/sensudipta/roadmatics-chat/main/assets/roadmatics/logo.png',
   ),
   privacyPolicy<String>(
     'chat.fluffy.privacy_policy_url',

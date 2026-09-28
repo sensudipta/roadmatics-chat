@@ -13,7 +13,9 @@ Roadmatics Chat is a Roadmatics-branded mobile Matrix client, based on
 `@username:roadmatics.com`. Accounts are created by Roadmatics administrators.
 
 Android-first release version: **0.1.0+1**. Android application ID and prepared
-iOS bundle ID: **com.roadmatics.chat**. The RC icon is a temporary placeholder.
+iOS bundle ID: **com.roadmatics.chat**. The blue/cyan cube-chat logo replaces the
+initial RC placeholder; [logo sources and exports](assets/roadmatics/README.md)
+are included.
 See [BUILD_REPORT.md](BUILD_REPORT.md) for verified artifacts and outstanding
 acceptance tests; feature availability is not a claim of completed testing.
 

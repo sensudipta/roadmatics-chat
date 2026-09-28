@@ -21,8 +21,9 @@ are separate milestones. No store upload is authorized by this checklist.
 - [ ] Upload a verified AAB to **Internal Testing** first.
 - [ ] Supply support contact, accurate privacy-policy URL, content rating, target
       audience, Data Safety, and app access/reviewer instructions.
-- [ ] Replace the temporary RC icon with approved artwork; supply screenshots,
-      feature graphic, store descriptions, and release notes.
+- [x] Replace the temporary RC icon with artwork based on the user-selected
+      cube/chat logo. Platform assets and editable monochrome vector prepared.
+- [ ] Supply screenshots, feature graphic, store descriptions, and release notes.
 - [ ] Increment version/build code for each subsequent upload.
 - [ ] Publish corresponding AGPL source for each distributed binary.
 - [ ] Obtain a separate decision before production submission/publication.

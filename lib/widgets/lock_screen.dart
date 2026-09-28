@@ -107,7 +107,7 @@ class _LockScreenState extends State<LockScreen> {
               children: [
                 Center(
                   child: Image.asset(
-                    'assets/roadmatics/rc_foreground.png',
+                    'assets/roadmatics/logo_monochrome.png',
                     width: 128,
                     color: Theme.of(context).colorScheme.surfaceContainerHigh,
                   ),

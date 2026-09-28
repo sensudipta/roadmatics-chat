@@ -97,7 +97,7 @@ abstract class PlatformInfos {
       ],
       applicationIcon: ClipRRect(
         borderRadius: BorderRadius.circular(64),
-        child: Image.asset('assets/roadmatics/rc.png', width: 64, height: 64),
+        child: Image.asset('assets/roadmatics/logo.png', width: 64, height: 64),
       ),
       applicationName: AppSettings.applicationName.value,
     );

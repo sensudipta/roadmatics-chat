@@ -44,7 +44,7 @@ class LoginView extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(128),
                       child: Image.asset(
-                        'assets/roadmatics/rc.png',
+                        'assets/roadmatics/logo.png',
                         width: 128,
                         height: 128,
                       ),

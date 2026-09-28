@@ -47,10 +47,10 @@ notification/database fixes were carried forward separately. Details:
 - Rust native builds used stable **1.98.1**, installed by upstream Cargokit.
 - Java for Gradle: Android Studio JBR **21.0.10**.
 - AGP **8.11.1**, Gradle **8.14.1**, Kotlin **2.2.20**.
-- APK: `build/app/outputs/flutter-apk/app-release.apk` (approximately 185.6 MB).
-- APK SHA256: `9a571a7de55ffc8d5218e3b4453dddab9f71d689ff53b957f400cdeb409859d6`.
-- AAB: `build/app/outputs/bundle/release/app-release.aab` (approximately 147.1 MB).
-- AAB SHA256: `012eff7104a9092e3285ceeab517a1e8936a54db9cba4a12079ce3add8c3bf05`.
+- APK: `build/app/outputs/flutter-apk/app-release.apk` (approximately 188.4 MB).
+- APK SHA256: `9ffc8d7daeafe109732fea6636e28e597aeda967db6d73e6cf550595d25d7cd7`.
+- AAB: `build/app/outputs/bundle/release/app-release.aab` (approximately 149.9 MB).
+- AAB SHA256: `a2536617ef75263724bb238eb0664107bb934973d825e74dbca43f32a8f3fc5a`.
 - Upload certificate SHA256:
   `814ac1705878e9dd808ed9cde05a2a5d733d45c553cb02dc31c99f7b0277bd02`.
 - Debug APK: `build/app/outputs/flutter-apk/app-debug.apk`.
@@ -65,19 +65,19 @@ two secure locations as described in [ANDROID_BUILD.md](ANDROID_BUILD.md).
 | --- | --- |
 | Untouched stable Android baseline | PASS — v2.9.1 debug build, 220.8 seconds |
 | Dependency resolution | PASS — existing dependency versions retained; only FCM/Firebase entries added |
-| Roadmatics analyze | PASS — no issues, final run 38.6 seconds |
+| Roadmatics analyze | PASS — no issues, logo update run 43.3 seconds |
 | Tests | PASS — 8 tests, including 4 login/configuration regression tests; upstream includes placeholder widget tests |
 | Roadmatics debug build | PASS — 64.3 seconds |
-| Roadmatics signed release APK | PASS — corrected release, 68.4 seconds |
+| Roadmatics signed release APK | PASS — new-logo release, final build 71.4 seconds |
 | APK signature | PASS — APK Signature Scheme v2, one RSA-3072 Roadmatics signer |
 | APK manifest | PASS — package/name/version/launcher verified from artifact |
 | APK Firebase resources | PASS — matching Roadmatics Android app/project identifiers and FCM service present; notification permission declared |
 | APK ZIP / 64-bit ELF alignment | PASS — 16 KB zipalign and all 18 inspected 64-bit ELF libraries |
-| Release AAB | PASS — corrected release, 22.8 seconds; bundletool 1.18.3 validation successful |
+| Release AAB | PASS — new-logo release, 22.3 seconds; bundletool 1.18.3 validation successful |
 | AAB signing | PASS — jarsigner reports verified; standard self-signed/no-timestamp warnings and streaming manifest-order warnings recorded |
-| REUSE licence audit | PASS — 643/643 files with copyright/licence information at audit time |
+| REUSE licence audit | PASS — 648/648 files with copyright/licence information at audit time |
 | Secret scan | PASS — staged-source scan clear; history clear with eight explicitly reviewed upstream findings (see SECRET_AUDIT.md) |
-| Release install / launch | PASS — corrected signed release updated in place and launched on Realme RMX1921, Android 11 |
+| Release install / launch | PASS — new-logo signed release updated in place and launched on Realme RMX1921, Android 11 |
 | Account login / room-list sync | PASS — user confirmed successful login and visible room list on the corrected release. |
 | Text send/receive | PASS — user confirmed sending and receiving messages on the corrected release. |
 | Separate DM / group coverage | NOT YET CONFIRMED |
@@ -97,6 +97,26 @@ two secure locations as described in [ANDROID_BUILD.md](ANDROID_BUILD.md).
 Read-only HTTP checks confirmed that the Roadmatics Matrix endpoint responds and
 advertises password login. The later user confirmation provides the separate
 authenticated login and bidirectional messaging evidence recorded above.
+
+## Logo update
+
+The user-selected blue/cyan cube-chat poster was adapted into a transparent
+raster master, opaque 1024px app icon, and simplified monochrome SVG/PNG.
+Android launcher/adaptive/themed/notification/splash and iOS icon/splash sizes
+were generated. Login, intro, About, PIN and empty-state branding now use the
+new colour or monochrome artwork as appropriate. Earlier RC placeholders remain
+as unused source history. See [logo files](assets/roadmatics/README.md).
+
+Verified all 21 iOS icon PNGs are opaque and all five notification masks are
+nonempty and transparent. The final APK contains the exact new colour and
+monochrome logo assets. Eight existing tests, analysis, release APK/AAB builds,
+signature and bundle validation passed. The signed APK was installed in place
+and launched. Account/messaging/push acceptance above was performed before this
+artwork-only update; those flows were not retested as part of the logo change.
+
+A local export bundle is available at
+`build/branding/roadmatics-chat-logo-kit.zip`. Full-colour artwork is raster;
+the simplified monochrome source is true SVG. An iOS build remains pending.
 
 ## Device regression correction
 
@@ -167,5 +187,5 @@ validation and local/public API health checks passed. See
 3. Check foreground-specific notification behavior. Background delivery and
    delivery after removal from recents, including correct-room tap, have passed;
    the approved Synapse exception and corrected gateway launcher are active.
-4. Back up the upload key/password. Store console setup, approved artwork,
+4. Back up the upload key/password. Store console setup, store screenshots,
    confirmed privacy details and later iOS signing remain separate publication work.
