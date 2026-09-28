@@ -3,8 +3,9 @@
 
 # Roadmatics Chat build report — 2026-09-29
 
-**Android source/build checkpoint complete; device acceptance and server push
-deployment pending. Do not describe this as an end-to-end accepted release.**
+**Android build, login, room-list sync and bidirectional text messaging verified.
+Remaining device acceptance and server push deployment are pending. Do not
+describe this as an end-to-end accepted release.**
 
 ## Repository
 
@@ -17,7 +18,7 @@ deployment pending. Do not describe this as an end-to-end accepted release.**
 | Branch | `main` |
 | Stable base | `v2.9.1` |
 | Base SHA | `f7bded3e049c0077b3ade8d02cae6d06e5d5756f` |
-| Public push | User published implementation commit `b28766ac3`; GitHub CLI browser authentication is now configured. |
+| Public push | User published implementation commit `b28766ac3`; login correction `2afc2b4b9` pushed successfully using authenticated GitHub CLI credentials. |
 
 The latest stable v2.9.5 was tried first. Its explicit SDK 37 target is incompatible
 with the currently available SDK 37.0 under its pinned AGP. The PRD's earlier
@@ -76,17 +77,20 @@ two secure locations as described in [ANDROID_BUILD.md](ANDROID_BUILD.md).
 | REUSE licence audit | PASS — 636/636 files with copyright/licence information at audit time |
 | Secret scan | PASS — staged-source scan clear; history clear with eight explicitly reviewed upstream findings (see SECRET_AUDIT.md) |
 | Release install / launch | PASS — corrected signed release updated in place and launched on Realme RMX1921, Android 11 |
-| Account login / room sync | PENDING — corrected release now opens the password form against `matrix.roadmatics.com` on the phone; awaiting manual account login. |
-| Text send/receive / DM / group | NOT TESTED |
+| Account login / room-list sync | PASS — user confirmed successful login and visible room list on the corrected release. |
+| Text send/receive | PASS — user confirmed sending and receiving messages on the corrected release. |
+| Separate DM / group coverage | NOT YET CONFIRMED |
 | Reply/thread / reactions | NOT TESTED |
 | Attachment / media download | NOT TESTED |
 | Search / background-resume | NOT TESTED |
-| FCM initialization/token / push delivery / notification tap | NOT TESTED — device and Sygnal prerequisites pending |
+| FCM initialization/token | Supported by runtime evidence — Firebase setup reached, followed by pusher registration attempt, which requires a non-null FCM token. No token or pusher errors appeared in the captured log. Token value was not displayed. |
+| Registered pusher / push delivery / notification tap | PENDING — registration success needs independent confirmation; Sygnal deployment and delivery tests remain outstanding. |
 | iOS build/signing | NOT RUN — Android-first Linux milestone |
 | GitHub Actions | No remote runs returned after publication |
 
 Read-only HTTP checks confirmed that the Roadmatics Matrix endpoint responds and
-advertises password login. These are not proof of authenticated login or messaging.
+advertises password login. The later user confirmation provides the separate
+authenticated login and bidirectional messaging evidence recorded above.
 
 ## Device regression correction
 
@@ -99,7 +103,16 @@ reproduced the incorrect destinations before the fix and pass after it.
 The corrected release was installed with `adb install -r` using the same upload
 key. A real tap of Sign in reached the live Roadmatics password screen, with
 two input fields and no route-error page. No password was entered by automation.
-Authenticated login, room sync and messaging remain pending user sign-in.
+The user subsequently confirmed that the room list appears and messages can be
+sent and received. Separate DM/group, media, search and notification acceptance
+have not been inferred from that confirmation.
+
+A private, app-process-only Android log capture reached Firebase setup and
+pusher registration without observed token-acquisition or registration errors.
+The registration-attempt log occurs after the code requires a non-null FCM token;
+this supports Firebase/token initialization but does not independently prove that
+Synapse retained the pusher or delivered a notification. The local capture is
+outside Git with mode `0600`; no token or message content is included here.
 
 ## Known build warnings and resolved failures
 
@@ -133,11 +146,12 @@ separate authorization for that exact change.
 
 ## Remaining actions
 
-1. Complete normal-account login on the connected phone and the remaining
-   acceptance checks above. Do not send passwords in chat.
+1. Complete the remaining DM/group, media, reactions, search and background
+   acceptance checks above; login and bidirectional text messaging are confirmed.
 2. Check the public repository CI run when available.
-3. Once mobile Firebase initialization is verified, provide the Matrix host/access
-   details and put a matching Firebase Admin service-account JSON securely on the
-   server (not in this repository). Then install/test Sygnal per PUSH_GATEWAY.md.
+3. Provide Matrix host/access details and put a matching Firebase Admin
+   service-account JSON securely on the server (not in this repository). Confirm
+   the registered pusher and server topology, then install/test Sygnal per
+   PUSH_GATEWAY.md. These server prerequisites have been requested.
 4. Back up the upload key/password. Store console setup, approved artwork,
    confirmed privacy details and later iOS signing remain separate publication work.
